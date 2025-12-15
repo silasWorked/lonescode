@@ -1,20 +1,15 @@
 # LonesCode IDE - Optimized Release Script
-# Usage: powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 [-BumpVersion patch|minor|major] [-SkipBuild] [-Draft] [-UseGitHubActions]
+# Usage: powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 [-BumpVersion patch|minor|major] [-LocalOnly]
 # 
-# Features:
-#   - Auto version bump (patch/minor/major)
-#   - Cross-platform builds (Win/Mac/Linux via GitHub Actions)
-#   - Auto-generated changelog from commits
-#   - Draft release option
-#   - Smart dependency caching
+# By default: bumps patch version, builds on GitHub Actions (Win/Mac/Linux), creates release
+# Use -LocalOnly to build only Windows locally
 
 param(
     [ValidateSet('patch', 'minor', 'major', '')]
-    [string]$BumpVersion = '',
+    [string]$BumpVersion = 'patch',
     [switch]$SkipBuild,
     [switch]$Draft,
     [switch]$Force,
-    [switch]$UseGitHubActions,
     [switch]$LocalOnly
 )
 
@@ -319,16 +314,16 @@ function Main {
             throw "Release $tag already exists. Use -Force to overwrite or bump version with -BumpVersion"
         }
         
-        # Use GitHub Actions for cross-platform build
-        if ($UseGitHubActions -and -not $LocalOnly) {
-            Write-Info "Triggering GitHub Actions for cross-platform build..."
+        # Use GitHub Actions for cross-platform build (default)
+        if (-not $LocalOnly) {
+            Write-Info "Triggering GitHub Actions for cross-platform build (Win/Mac/Linux)..."
             
             # Create and push tag to trigger workflow
             Push-Location $ProjectRoot
             if (-not (Test-TagExists $tag)) {
                 git tag $tag
                 git push origin $tag
-                Write-Success "Tag $tag pushed - GitHub Actions will build Win/Mac/Linux"
+                Write-Success "Tag $tag pushed - GitHub Actions started!"
             } else {
                 # Trigger workflow manually
                 & $GhExe workflow run release.yml -f version=$version
@@ -336,25 +331,29 @@ function Main {
             }
             Pop-Location
             
-            Write-Host ""
-            Write-Host "Monitor build: " -NoNewline
-            $repoUrl = & $GhExe repo view --json url -q .url 2>$null
-            Write-Host "$repoUrl/actions" -ForegroundColor Blue
-            
             $stopwatch.Stop()
-            Write-Success "Release initiated in $([math]::Round($stopwatch.Elapsed.TotalSeconds, 1))s"
-            Write-Info "GitHub Actions will create the release with all platform builds"
+            Write-Host ""
+            Write-Success "Release $tag initiated in $([math]::Round($stopwatch.Elapsed.TotalSeconds, 1))s"
+            Write-Host ""
+            Write-Host "GitHub Actions is now building for Windows, macOS, and Linux" -ForegroundColor Cyan
+            Write-Host ""
+            
+            $repoUrl = & $GhExe repo view --json url -q .url 2>$null
+            Write-Host "Monitor build: $repoUrl/actions" -ForegroundColor Blue
+            Write-Host "Release page:  $repoUrl/releases/tag/$tag" -ForegroundColor Blue
             return
         }
+        
+        # LOCAL BUILD MODE (Windows only)
+        Write-Warn "Local mode: Building Windows only"
         
         # Step 4: Install dependencies
         Install-Dependencies
         
-        # Step 5: Build locally (Windows only, or with Docker for Linux)
+        # Step 5: Build locally (Windows only)
         if (-not $SkipBuild) {
             Clean-Dist
             Build-Windows
-            # Build-Linux  # Uncomment if you have Docker/WSL setup
         }
         
         # Step 6: Generate changelog

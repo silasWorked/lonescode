@@ -11,12 +11,10 @@
     "build:win": "electron-builder --win",
     "build:mac": "electron-builder --mac",
     "build:linux": "electron-builder --linux",
-    "release": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -UseGitHubActions",
-    "release:local": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -LocalOnly",
-    "release:patch": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion patch -UseGitHubActions",
-    "release:minor": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion minor -UseGitHubActions",
-    "release:major": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion major -UseGitHubActions",
-    "release:draft": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -Draft"
+    "release": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1",
+    "release:minor": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion minor",
+    "release:major": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion major",
+    "release:local": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -LocalOnly"
   },
   "build": {
     "appId": "com.lonescode.ide",
