@@ -1,70 +1,49 @@
-﻿{
-    "name":  "lonescode",
-    "author":  "lonestill",
-    "version":  "1.0.1",
-    "description":  "A lightweight code editor built with Electron",
-    "main":  "main.js",
-    "scripts":  {
-                    "start":  "electron .",
-                    "dev":  "electron . --dev",
-                    "build":  "electron-builder",
-                    "build:win":  "electron-builder --win",
-                    "build:mac":  "electron-builder --mac",
-                    "build:linux":  "electron-builder --linux",
-                    "release":  "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1",
-                    "release:patch":  "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion patch",
-                    "release:minor":  "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion minor",
-                    "release:major":  "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion major",
-                    "release:draft":  "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -Draft",
-                    "release:old":  "powershell -ExecutionPolicy Bypass -File tools/release.ps1"
-                },
-    "build":  {
-                  "appId":  "com.lonescode.ide",
-                  "productName":  "LonesCode",
-                  "files":  [
-                                "main.js",
-                                "preload.js",
-                                "renderer.js",
-                                "index.html",
-                                "styles.css",
-                                "node_modules/**/*"
-                            ],
-                  "win":  {
-                              "target":  [
-                                             {
-                                                 "target":  "nsis",
-                                                 "arch":  [
-                                                              "x64",
-                                                              "ia32"
-                                                          ]
-                                             },
-                                             {
-                                                 "target":  "portable",
-                                                 "arch":  [
-                                                              "x64"
-                                                          ]
-                                             }
-                                         ]
-                          },
-                  "nsis":  {
-                               "oneClick":  false,
-                               "allowToChangeInstallationDirectory":  true
-                           },
-                  "mac":  {
-                              "target":  [
-                                             "dmg",
-                                             "zip"
-                                         ]
-                          },
-                  "linux":  {
-                                "target":  [
-                                               "AppImage",
-                                               "deb"
-                                           ]
-                            }
-              },
-    "devDependencies":  {
-                            "electron":  "^39.2.7",
-                            "electron-builder":  "^26.0.12"
-                        }
+{
+  "name": "lonescode",
+  "author": "lonestill",
+  "version": "1.0.1",
+  "description": "A lightweight code editor built with Electron",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dev": "electron . --dev",
+    "build": "electron-builder",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac",
+    "build:linux": "electron-builder --linux",
+    "release": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -UseGitHubActions",
+    "release:local": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -LocalOnly",
+    "release:patch": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion patch -UseGitHubActions",
+    "release:minor": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion minor -UseGitHubActions",
+    "release:major": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -BumpVersion major -UseGitHubActions",
+    "release:draft": "powershell -ExecutionPolicy Bypass -File tools/release-optimized.ps1 -Draft"
+  },
+  "build": {
+    "appId": "com.lonescode.ide",
+    "productName": "LonesCode",
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer.js",
+      "index.html",
+      "styles.css",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": [
+        {"target": "nsis", "arch": ["x64", "ia32"]},
+        {"target": "portable", "arch": ["x64"]}
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    },
+    "mac": {"target": ["dmg", "zip"]},
+    "linux": {"target": ["AppImage", "deb"]}
+  },
+  "devDependencies": {
+    "electron": "^39.2.7",
+    "electron-builder": "^26.0.12"
+  }
 }
