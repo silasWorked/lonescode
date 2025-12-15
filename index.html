@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LonesCode IDE</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Верхняя панель инструментов -->
+    <div class="toolbar">
+      <button id="open-folder-btn" class="toolbar-btn">📁 Открыть папку</button>
+      <button id="new-file-btn" class="toolbar-btn" disabled>📄 Новый файл</button>
+      <button id="save-file-btn" class="toolbar-btn" disabled>💾 Сохранить</button>
+      <button id="save-as-btn" class="toolbar-btn" disabled>💾 Сохранить как...</button>
+      <span class="file-name" id="current-file-name">Без названия</span>
+    </div>
+
+    <!-- Основная рабочая область -->
+    <div class="main-content">
+      <!-- File Explorer (боковая панель) -->
+      <div class="sidebar">
+        <div class="sidebar-header">
+          <h3>ПРОВОДНИК</h3>
+        </div>
+        <div class="file-tree" id="file-tree">
+          <div class="empty-state">Откройте папку для начала работы</div>
+        </div>
+      </div>
+
+      <!-- Редактор кода -->
+      <div class="editor-area">
+        <div class="tabs" id="tabs-container">
+          <!-- Табы будут добавляться динамически -->
+        </div>
+        <div id="editor-container"></div>
+      </div>
+    </div>
+
+    <!-- Статус-бар -->
+    <div class="statusbar">
+      <span id="status-line-col">Ln 1, Col 1</span>
+      <span id="status-language">Plain Text</span>
+      <span id="status-encoding">UTF-8</span>
+    </div>
+  </div>
+
+  <!-- Диалог создания файла -->
+  <div id="new-file-dialog" class="dialog hidden">
+    <div class="dialog-content">
+      <h3>Создать новый файл</h3>
+      <input type="text" id="new-file-input" placeholder="Введите имя файла (например, test.js)" autocomplete="off">
+      <div class="dialog-buttons">
+        <button id="dialog-ok-btn" class="dialog-btn">Создать</button>
+        <button id="dialog-cancel-btn" class="dialog-btn cancel">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Диалог переименования файла -->
+  <div id="rename-file-dialog" class="dialog hidden">
+    <div class="dialog-content">
+      <h3>Переименовать</h3>
+      <input type="text" id="rename-file-input" placeholder="Введите новое имя" autocomplete="off">
+      <div class="dialog-buttons">
+        <button id="rename-ok-btn" class="dialog-btn">Переименовать</button>
+        <button id="rename-cancel-btn" class="dialog-btn cancel">Отмена</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Контекстное меню файлов -->
+  <div id="file-context-menu" class="context-menu hidden">
+    <div class="context-menu-item" data-action="rename">✏️ Переименовать</div>
+    <div class="context-menu-item" data-action="delete">🗑️ Удалить</div>
+    <div class="context-menu-divider"></div>
+    <div class="context-menu-item" data-action="copy-path">📋 Копировать путь</div>
+  </div>
+
+  <!-- Загрузка Monaco Editor -->
+  <script src="node_modules/monaco-editor/min/vs/loader.js"></script>
+  <script src="renderer.js"></script>
+</body>
+</html>
